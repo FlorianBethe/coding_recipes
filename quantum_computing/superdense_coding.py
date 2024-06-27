@@ -153,8 +153,37 @@ def superdense_encode_bits2qubit(qc:QuantumCircuit=None, bits:list=[0,0]):
     return qc
 
 
-def superdense_decode_qubit2bits(qc:QuantumCircuit):
+def process_quantum_circuit(qc:QuantumCircuit):
     bits = None
+
+    # Parameter zum Ausführen des Circuits im Simulator
+    backend = Aer.get_backend("qasm_simulator")
+    shots   = 1024 # the number of shots in the experiment
+        
+    # Run the algorithm
+    result = execute(qc, backend=backend, shots=shots).result()
+    
+    # Shows the results obtained from the quantum algorithm
+    counts = result.get_counts()
+    visualization.plot_histogram(counts)
+    
+    print(f"\nThe measured outcomes of the circuits are: {counts}")
+
+    return bits
+
+
+def superdense_decode_qubit2bits(qc:QuantumCircuit):
+    # 6. Bob applies Hadamard to q0
+    qc.h(0)
+
+    # 7. Bob measures q0 and q1
+    qc.measure(0, 1)
+    qc.measure(1, 0)
+
+
+    bits = process_quantum_circuit(qc)
+
+
     return bits
 
 
@@ -169,37 +198,19 @@ def process_quantum_communication(bits_Alice:list=None):
     qc.barrier()#label="message bits superdense encoded")
 
 
-    # 4. Send q0 via Quantum Channel to Bob
+    # TODO: Clarify: 4. Send q0 via Quantum Channel to Bob
 
 
     # 5. Bob applies CNOT to q1 with q0 as a control qubit
     qc.cx(0, 1)
 
-    # 6. Bob applies Hadamard to q0
-    qc.h(0)
 
-    # 7. Bob measures q0 and q1
-    qc.measure(0, 1)
-    qc.measure(1, 0)
-
-    
     # visualize quantum circuit
-    # qc.draw("mpl")
+    qc.draw("mpl")
     print(qc)
     
-    # Parameter zum Ausführen des Circuits im Simulator
-    backend = Aer.get_backend("qasm_simulator")
-    shots = 1024 # the number of shots in the experiment
-        
-    # Run the algorithm
-    result = execute(qc, backend=backend, shots=shots).result()
     
-    # Shows the results obtained from the quantum algorithm
-    counts = result.get_counts()
-    # visualization.plot_histogram(counts)
-    
-    print(f"\nThe measured outcomes of the circuits are: {counts}")
-    
+    # process circuit and decode superdense qubit2bits
     bits_Bob = superdense_decode_qubit2bits(qc)
     print(f"bits_Bob = {bits_Bob}")
     
@@ -212,12 +223,13 @@ def process_quantum_communication(bits_Alice:list=None):
 if "__main__" == __name__:
 
 
-    RANDOM = False
+    RANDOM = True
     # Alices BitArray mit den zwei klassischen Bits via Verschränkung an Bob übertragen.
     if RANDOM:
         # Auswahl zufälliger Bits, die Alice senden möchte
         bits_Alice = [random.randint(0, 1), random.randint(0, 1)]
         process_quantum_communication(bits_Alice)
+
     else:
         for b1 in range(2):
             for b2 in range(2):
