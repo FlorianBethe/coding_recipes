@@ -196,13 +196,12 @@ def process_quantum_communication(bits_Alice:list=None):
     
     # Shows the results obtained from the quantum algorithm
     counts = result.get_counts()
-    visualization.plot_histogram(counts)
+    # visualization.plot_histogram(counts)
     
-    print(f"\nThe measured outcomes of thh circuits are: {counts}")
+    print(f"\nThe measured outcomes of the circuits are: {counts}")
     
     bits_Bob = superdense_decode_qubit2bits(qc)
-    print(f"bits_Alice = {bits_Bob}")
-    
+    print(f"bits_Bob = {bits_Bob}")
     
     
 
@@ -223,91 +222,4 @@ if "__main__" == __name__:
         for b1 in range(2):
             for b2 in range(2):
                 process_quantum_communication([b1, b2])
-                print("\n\n\n______________________________________")
-    
-    
-    
-    """
-    
-    Zustände 0 und 1
-        |1>
-        |0>
-    
-    
-    Überlagerter Zustand
-        ist die Summe von Zuständen mit einem Vorfaktor für die Wahrscheinlichkeit
-        der jeweiligen Zustände.
-    
-    
-    Hadamard-Gatter
-        setzt die Wahrscheinlichkeit for die jeweiligen Zustände bei Messung auf 0.5 zu 0.5.
-        
-        H |0> = a|0> + b|1>
-        H |0> = 0.5|0> + 0.5|1>
-    
-    
-        H |0> = 0.3|0> + 0.7|1>
-    
-    
-    Face-Flip
-        tauscht + durch minus aus
-        
-        Z |x> = 0.5 |0> - 0.5 |1>
-    
-    
-    NOT-Gate
-    
-        X |0> = |1>
-        X |1> = |0>
-    
-    
-    Controlled Not-Gate
-    
-        CX |0> = 
-        CX |1> = 
-    
-    
-    """
-
-
-
-
-if False:
-    
-    # Leeren Quantenschaltkreis mit Anzahl Qbits und klassischen Bits erstellen
-    qc = QuantumCircuit(3, 3) # 1. Anzahl Quantenbits, 2. Anzahl klassische Bits
-    # qc.x(1)
-    qc.h(0) # Hadamard-Gatter
-    qc.h(1)
-    qc.h(2)
-    # qc.x(0) # Nicht-Gatter
-    
-    # Verschränkung, Kausalitäten, Instantan gemeinsame Zustandsänderung ohne Energieaufwand
-    qc.cx(0, 1) # Controlled-Nicht-Gatter
-    
-    qc.measure(0, 0)
-    qc.measure(1, 1)
-    qc.measure(2, 2)
-    # qc.draw("mpl")
-    
-    
-    # Print the circuit
-    # print(circuit_drawer(qc))
-    print(qc)
-    
-    
-    if True:
-        # Parameters for execution on simulator
-        backend = Aer.get_backend("qasm_simulator")
-        shots = 1024 # the number of shots in the experiment
-        
-        
-        # Run the algorithm
-        result = execute(qc, backend=backend, shots=shots).result()
-        
-        # Shows the results obtained from the quantum algorithm
-        counts = result.get_counts()
-        visualization.plot_histogram(counts)
-        
-        print(f"\nThe measured outcomes of thh circuits are: {counts}")
-    
+                print("\n\n______________________________________\n")
