@@ -9,7 +9,7 @@ Created on Sat Jun 29 12:05:40 2024
     
 @history:
     2024-06-29:
-        - initial upload of helpüer class QuantumHelper()
+        - initial upload of helper class QuantumHelper()
         - added method for superdense coding
         
 

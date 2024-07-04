@@ -18,7 +18,7 @@ Aufgabe:
     - Qubit is then transported via a quantum channel
 
 
-    STEPS
+    Superdense Coding Protocol
 
         1. Entangle q0 and q1
            - Alice gets q0 and Bob gets q1 
