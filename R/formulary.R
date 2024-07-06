@@ -43,6 +43,24 @@ if (!"readxl" %in% installed.packages())
 if (!"readxl" %in% loadedNamespaces())
   library(readxl)
 
+# load library ggplot2 if not already loaded
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+
+# load library corrplot if not already loaded
+if (!require(corrplot)) {
+  install.packages("corrplot")
+  library(corrplot)
+}
+
+# load library dplyr if not already loaded
+if (!require(dplyr)) {
+  install.packages("dplyr")
+  library(dplyr)
+}
+
 # install package readxml if not already installed using require()
 # require() trys to load the library and returns false if not successfull
 if (!require(readxl)) {
@@ -226,7 +244,20 @@ data(diamonds)
 ## msleep (ggplot2)
 # Data: Mammals Sleep
 # https://seandavi.github.io/ITR/dplyr_intro_msleep.html#Data:_Mammals_Sleep
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+  library(ggplot2)
+}
 data(msleep)
+
+
+## economics (ggplot2)
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+data(economics)
+
 
 ## UCBAdmissions
 
@@ -242,6 +273,10 @@ head(UCBAdmissions)
 
 ## HairEyeColor
 data("HairEyeColor")
+
+
+## CO2
+data(CO2)
 
 
 ## UKgas
@@ -465,6 +500,21 @@ pie(hair, labels = beschriftung_hair, main = "Haarfarben")
 
 
 ## Liniendiagramm
+
+# Liniendiagramm mit einer Variablen unter Verwendung von ggplot2
+# load library ggplot2 if not already loaded
+if (!require(ggplot2)) {
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+
+ggplot(
+  data = arbeit,
+  aes(
+    x = Datum,
+    y = Erwerbstätige..Mio.)) +
+
+  geom_line()
 
 
 ## Boxplot
