@@ -50,11 +50,37 @@ if (!require(readxl)) {
   library(readxl)
 }
 
-# Bibliothek reshape2 laden, ggf. installieren
-if (!require(reshape2)) {
-  install.packages("reshape2")
-  library(reshape2)
+# Bibliothek import laden, ggf. installieren
+if (!require(import)) {
+  install.packages("import")
+  library(import)
 }
+
+# Bibliothek lme4 laden, ggf. installieren
+if (!require(lme4)) {
+  install.packages("lme4")
+  library(lme4)
+}
+
+# Bibliothek simr laden, ggf. installieren
+if (!require(simr)) {
+  install.packages("simr")
+  library(simr)
+}
+
+# Bibliothek WebPower laden, ggf. installieren
+if (!require(WebPower)) {
+  install.packages("WebPower")
+  library(WebPower)
+}
+
+# Bibliothek datasets laden, ggf. installieren
+if (!require(datasets)) {
+  install.packages("datasets")
+  library(datasets)
+}
+
+
 
 # detach a library
 detach("package:readxl", unload=TRUE)
@@ -128,8 +154,17 @@ wp.regression()
 
 
 ### simr Paket
-library(lme4)
-library(simr)
+# Bibliothek lme4 laden, ggf. installieren
+if (!require(lme4)) {
+  install.packages("lme4")
+  library(lme4)
+}
+
+# Bibliothek simr laden, ggf. installieren
+if (!require(simr)) {
+  install.packages("simr")
+  library(simr)
+}
 
 # Einfache gemischte Modell
 model <- lmer(y ~ x + (1|group), data = mydata)
@@ -207,6 +242,14 @@ head(UCBAdmissions)
 
 ## HairEyeColor
 data("HairEyeColor")
+
+
+## UKgas
+data(UKgas)
+
+
+## USAccDeats
+data(USAccDeaths)
 
 
 ## Fehlende Werte auschließen
@@ -403,6 +446,25 @@ ggplot(
     title = "Durchschnittliche Ozonkonzentration nach Monat",
     x     = "Monat",
     y     = "Durchschnittliche Ozonkonzentration (ppb)")
+
+
+## Kreisdiagramm
+
+data("HairEyeColor")
+
+hair <- as.table(apply(HairEyeColor, c(1), sum))
+
+prozent_hair <- round(prop.table(hair) * 100, 2)
+
+beschriftung_hair <- paste(names(hair), prozent_hair, "%", sep = " ")
+
+
+#par(mfrow = c(1, 2))
+
+pie(hair, labels = beschriftung_hair, main = "Haarfarben")
+
+
+## Liniendiagramm
 
 
 ## Boxplot
