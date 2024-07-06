@@ -50,6 +50,12 @@ if (!require(readxl)) {
   library(readxl)
 }
 
+# Bibliothek reshape2 laden, ggf. installieren
+if (!require(reshape2)) {
+  install.packages("reshape2")
+  library(reshape2)
+}
+
 # detach a library
 detach("package:readxl", unload=TRUE)
 
@@ -182,6 +188,11 @@ if (!require(ggplot2)) {
 data(diamonds)
 
 
+## msleep (ggplot2)
+# Data: Mammals Sleep
+# https://seandavi.github.io/ITR/dplyr_intro_msleep.html#Data:_Mammals_Sleep
+data(msleep)
+
 ## UCBAdmissions
 
 # load standard data set
@@ -193,6 +204,13 @@ str(UCBAdmissions)
 summary(UCBAdmissions)
 head(UCBAdmissions)
 
+
+## HairEyeColor
+data("HairEyeColor")
+
+
+## Fehlende Werte auschließen
+airquality_clean <- na.omit(airquality[, c("Temp", "Ozone", "Month")])
 
 
 ###################################
@@ -288,8 +306,6 @@ ggplot(
       hjust = 0.5))
 
 
-
-
 ## Säulendiagramm
 
 admissions_table <- as.data.frame.table(UCBAdmissions)
@@ -328,16 +344,90 @@ ggplot(
 
   
 # (A) Gestapelte Säulen – Farben werden je Geschlecht gestapelt
-barplot(table(data$Lieblingsfarbe, data$Geschlecht),
-        col = c("blue", "yellow", "green", "red", "black"))
-# (B) Gestapelte Säulen – Je Farbe werden die Anzahl der 
-Geschlechtsausprägungen gestapelt
-barplot(table(data$Geschlecht, data$Lieblingsfarbe),
-        col = c("darkblue", "darkred"))
+barplot(
+  table(
+    data$Lieblingsfarbe,
+    data$Geschlecht),
+  col = c("blue", "yellow", "green", "red", "black"))
+
+# (B) Gestapelte Säulen – Je Farbe werden die Anzahl der Geschlechtsausprägungen
+#     gestapelt
+barplot(
+  table(
+    data$Geschlecht,
+    data$Lieblingsfarbe),
+  col = c("darkblue", "darkred"))
+
 # (C) Gruppierte Säulen – Je Geschlecht hat jede Farbe eine Säule
-barplot(table(data$Lieblingsfarbe, data$Geschlecht), beside = TRUE,
-        col = c("blue", "yellow", "green", "red", "black"))
+barplot(
+  table(
+    data$Lieblingsfarbe,
+    data$Geschlecht),
+  beside = TRUE,
+  col = c("blue", "yellow", "green", "red", "black"))
+
 # (D) Gruppierte Säulen – Je Farbe werden die Anzahl der 
 #     Geschlechtsausprägungen in einer separaten Säule abgetragen
-barplot(table(data$Geschlecht, data$Lieblingsfarbe), beside = TRUE,
-        col = c("darkblue", "darkred"))
+barplot(
+  table(
+    data$Geschlecht,
+    data$Lieblingsfarbe),
+  beside = TRUE,
+  col = c("darkblue", "darkred"))
+
+
+
+## Balkendiagramm
+# Basisversion von R
+barplot(
+  table(data$Lieblingsfarbe), 
+  xlab = "Häufigkeit",
+  ylab = "Farben", 
+  main = "Lieblingsfarben", 
+  horiz = TRUE)
+
+# ggplot2
+ggplot(
+  data = ozone_average_by_month,
+  aes(
+    x = Month,
+    y = Ozone)) +
+  
+  geom_bar(
+    stat = "identity",
+    fill = "steelblue") +
+  
+  coord_flip() +
+  
+  labs(
+    title = "Durchschnittliche Ozonkonzentration nach Monat",
+    x     = "Monat",
+    y     = "Durchschnittliche Ozonkonzentration (ppb)")
+
+
+## Boxplot
+
+ggplot(
+  data = airquality,
+  aes(
+    x = factor(Month),
+    y = Temp)) +
+  
+  stat_boxplot(
+    geom   = "errorbar",
+    width  = 0.25,
+    colour = "blue") +
+  
+  geom_boxplot(
+    outlier.color = "red",
+    notch = TRUE) +
+  
+  #  geom_boxplot(
+  #    outlier.color = "red") +
+  
+  geom_jitter(size = 1) +
+  
+  labs(
+    title = "Boxplot der Temperatur nach Monat",
+    x     = "Monat",
+    y     = "Temperatur [°F]") 
