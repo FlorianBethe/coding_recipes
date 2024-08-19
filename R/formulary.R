@@ -25,6 +25,43 @@ setwd("C:\\Users\\")
 
 
 
+
+
+################################################################################
+# Arbeitsverzeichnis                                                           #
+################################################################################
+# Phind: https://www.phind.com/search?cache=qnus6o24izgmdxkd10279vta
+
+getwd()
+
+
+## Innerhalb von RStudio
+
+# Ändere das Arbeitsverzeichnis auf den Pfad der aktuellen Datei
+# - für Quelle und Knit
+srcdir <- getSrcDirectory(function(){})[1]
+if (srcdir == "") {
+  # - für Ausführen
+  srcdir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+}
+setwd(srcdir)
+rm(srcdir)
+
+## Ohne RStudio
+
+# Ermittle das Verzeichnis des aktuellen Skripts
+script.dir <- dirname(sys.frame(1)$ofile)
+
+# Setze das Arbeitsverzeichnis auf das Verzeichnis des Skripts
+setwd(script.dir)
+
+
+getwd()
+
+
+
+
+
 ################################################################################
 # Packages                                                                     #
 ################################################################################
@@ -35,6 +72,11 @@ setwd("C:\\Users\\")
 # check if library readxl is loaded
 "readxl" %in% loadedNamespaces()
 
+
+# install multiple packages within one install.packages() method call
+install.packages(c("ggplot2", "dplyr"))
+
+
 # install package readxml if not already installed using installed.packages()
 if (!"readxl" %in% installed.packages())
   install.packages("readxl")
@@ -42,6 +84,12 @@ if (!"readxl" %in% installed.packages())
 # load library readxml if not already loaded
 if (!"readxl" %in% loadedNamespaces())
   library(readxl)
+
+# Bibliothek RTools laden, ggf. installieren
+if (!require(RTools)) {
+  install.packages("RTools")
+  library(apaTables)
+}
 
 # load library ggplot2 if not already loaded
 if (!require(ggplot2)) {
@@ -59,6 +107,12 @@ if (!require(corrplot)) {
 if (!require(dplyr)) {
   install.packages("dplyr")
   library(dplyr)
+}
+
+# load library tidyr if not already loaded
+if (!require(tidyr)) {
+  install.packages("tidyr")
+  library(tidyr)
 }
 
 # install package readxml if not already installed using require()
@@ -98,6 +152,17 @@ if (!require(datasets)) {
   library(datasets)
 }
 
+# Bibliothek apaTables laden, ggf. installieren
+if (!require(apaTables)) {
+  install.packages("apaTables")
+  library(apaTables)
+}
+
+# Bibliothek lsr (Companion to "Learning Statistics with R") laden, ggf. installieren
+if (!require(lsr)) {
+  install.packages("lsr")
+  library(lsr)
+}
 
 
 # detach a library
@@ -517,6 +582,31 @@ ggplot(
   geom_line()
 
 
+## Liniendiagram mit manuell erstelltem Datensatz
+library(ggplot2)
+
+# Beispiel-Datensatz
+df <- data.frame(
+  Jahr = rep(2020:2023, each = 2),
+  Wert = c(3.2, 4.1, 11, 21, 31.1, 53.5, 78.3, 120),
+  Person = rep(c("Erika", "Hans"), times = 4)
+)
+
+# Liniendiagramm mit angepasster y-Achse
+ggplot(df, aes(x = Jahr, y = Wert, color = Person)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(
+    labels = scales::comma,  # Zahlenwerte mit Komma formatieren
+    breaks = seq(0, 120, by = 20)  # Achsenbeschriftungen in 20er-Schritten
+  ) +
+  labs(
+    title = "Wertentwicklung nach Jahr",
+    x = "Jahr",
+    y = "Wert"
+  )
+
+
 ## Boxplot
 
 ggplot(
@@ -543,3 +633,27 @@ ggplot(
     title = "Boxplot der Temperatur nach Monat",
     x     = "Monat",
     y     = "Temperatur [°F]") 
+
+
+
+
+
+
+### Power-Analyse
+
+# Alle Zeilen mit fehlenden Daten ausgeben
+# Beispiel-Datensatz erstellen
+data <- data.frame(
+  A = c(1, NA, 3, 4),
+  B = c(1, 2, 3, 4),
+  C = c(1, 2, NA, 4)
+)
+
+# Zeilen mit mindestens einem NA-Wert finden
+rows_with_na <- data[rowSums(is.na(data)) > 0, ]
+
+# Zeilen ausgeben
+print(rows_with_na)
+
+# OR
+nrow(data[rowSums(is.na(data)) > 0, ])
